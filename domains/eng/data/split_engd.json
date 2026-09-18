@@ -1,0 +1,249 @@
+{
+ "evolve": [
+  {
+   "id": "ZH_02",
+   "domain": "AerospaceEngineering"
+  },
+  {
+   "id": "XG_08",
+   "domain": "AutomationEngineering"
+  },
+  {
+   "id": "YX_01",
+   "domain": "AutomotiveEngineering"
+  },
+  {
+   "id": "YX_02",
+   "domain": "AutomotiveEngineering"
+  },
+  {
+   "id": "YJ_01",
+   "domain": "ComputationalMechanics"
+  },
+  {
+   "id": "YJ_02",
+   "domain": "ComputationalMechanics"
+  },
+  {
+   "id": "YJ_03",
+   "domain": "ComputationalMechanics"
+  },
+  {
+   "id": "XY_05",
+   "domain": "ComputerArchitecture"
+  },
+  {
+   "id": "Yiqi_01",
+   "domain": "ComputerScience"
+  },
+  {
+   "id": "Yiqi_02",
+   "domain": "ComputerScience"
+  },
+  {
+   "id": "Yuqi_01",
+   "domain": "ComputerScience"
+  },
+  {
+   "id": "AB_01",
+   "domain": "ComputerVision"
+  },
+  {
+   "id": "AB_02",
+   "domain": "ComputerVision"
+  },
+  {
+   "id": "AB_03",
+   "domain": "ComputerVision"
+  },
+  {
+   "id": "JY_01",
+   "domain": "ComputerVision"
+  },
+  {
+   "id": "JY_02",
+   "domain": "ComputerVision"
+  },
+  {
+   "id": "JY_03",
+   "domain": "ComputerVision"
+  },
+  {
+   "id": "LX_02",
+   "domain": "ControlSystems"
+  },
+  {
+   "id": "ZC_02",
+   "domain": "ControlTheory"
+  },
+  {
+   "id": "NS_PA_SS_03",
+   "domain": "DigitalDesign"
+  },
+  {
+   "id": "NS_PA_SS_04",
+   "domain": "DigitalDesign"
+  },
+  {
+   "id": "NS_PA_SS_05",
+   "domain": "DigitalDesign"
+  },
+  {
+   "id": "NS_PA_SS_06",
+   "domain": "DigitalDesign"
+  },
+  {
+   "id": "NS_PA_SS_07",
+   "domain": "DigitalDesign"
+  },
+  {
+   "id": "NS_PA_SS_08",
+   "domain": "DigitalDesign"
+  },
+  {
+   "id": "NS_PA_SS_09",
+   "domain": "DigitalDesign"
+  },
+  {
+   "id": "NS_PA_SS_10",
+   "domain": "DigitalDesign"
+  },
+  {
+   "id": "XY_01",
+   "domain": "DigitalDesign"
+  },
+  {
+   "id": "XY_03",
+   "domain": "DigitalDesign"
+  },
+  {
+   "id": "XY_04",
+   "domain": "DigitalHardwareDesign"
+  },
+  {
+   "id": "NS_PA_SS_02",
+   "domain": "DigitalLogic"
+  },
+  {
+   "id": "AV_02",
+   "domain": "DigitalSignalProcessing"
+  },
+  {
+   "id": "AV_03",
+   "domain": "DigitalSignalProcessing"
+  },
+  {
+   "id": "KV_02",
+   "domain": "Engdesign"
+  },
+  {
+   "id": "KV_03",
+   "domain": "Engdesign"
+  },
+  {
+   "id": "DL_01",
+   "domain": "HardwareDesign"
+  },
+  {
+   "id": "DL_02",
+   "domain": "HardwareDesign"
+  },
+  {
+   "id": "WJ_01",
+   "domain": "ImageProcessing"
+  },
+  {
+   "id": "HC_03",
+   "domain": "MachineLearning"
+  },
+  {
+   "id": "ZH_03",
+   "domain": "MechanicalEngineering"
+  },
+  {
+   "id": "ZH_04",
+   "domain": "MechanicalEngineering"
+  },
+  {
+   "id": "AM_02",
+   "domain": "MultiAgentDynamicPathPlanning"
+  },
+  {
+   "id": "AM_03",
+   "domain": "MultiGoalDynamicPathPlanning"
+  },
+  {
+   "id": "ZC_03",
+   "domain": "OnlineDecisionMaking"
+  },
+  {
+   "id": "CY_03",
+   "domain": "OperatingSystem"
+  },
+  {
+   "id": "XW_01",
+   "domain": "OperatingSystem"
+  },
+  {
+   "id": "XW_02",
+   "domain": "OperatingSystem"
+  },
+  {
+   "id": "XW_03",
+   "domain": "OperatingSystem"
+  },
+  {
+   "id": "XW_04",
+   "domain": "OperatingSystem"
+  },
+  {
+   "id": "libin2_01",
+   "domain": "OperatingSystem"
+  },
+  {
+   "id": "libin2_02",
+   "domain": "OperatingSystem"
+  },
+  {
+   "id": "libin2_03",
+   "domain": "OperatingSystem"
+  },
+  {
+   "id": "XG_13",
+   "domain": "PidControllerDesign"
+  },
+  {
+   "id": "YX_03",
+   "domain": "RadarEngineering"
+  },
+  {
+   "id": "XZ_01",
+   "domain": "Robotics"
+  },
+  {
+   "id": "XZ_02",
+   "domain": "Robotics"
+  },
+  {
+   "id": "HJ_01",
+   "domain": "RoboticsAndComputerVision"
+  },
+  {
+   "id": "RK_01",
+   "domain": "StructuralEngineering"
+  },
+  {
+   "id": "RK_02",
+   "domain": "StructuralEngineering"
+  },
+  {
+   "id": "RK_03",
+   "domain": "StructuralEngineering"
+  },
+  {
+   "id": "RK_04",
+   "domain": "StructuralEngineering"
+  }
+ ],
+ "_doc": "All 61 tasks. NO held-out split: the suite is too small to spend tasks on one, and the verdict comes from two external surfaces (EngDesign v1 hardened, FrontierEng minus its EngDesign domain) that never enter selection."
+}

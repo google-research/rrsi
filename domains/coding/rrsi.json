@@ -1,0 +1,32 @@
+{
+ "_doc": "Coding instance: Terminal-Bench 2.1 (89 tasks, evolve set = whole suite), Claude Opus 4.8 policy, Terminus-2 base harness. S = fraction of trials whose hidden tests pass over 89 x k = 178 trials. Paper values: delta = 0.017 (3 passes of 178), beta0 = 0.10, beta1 = 44.5 (25% tokens per additional pass), w_s = 0 (inside the band a candidate is admitted only for a token saving or a new structural component, never for a within-band score gain), w_c = 15 per unit relative cost. Set delta to null to re-estimate it with `calibrate` as delta_z standard deviations of the null score difference of the base evaluation.",
+ "T": 20,
+ "k": 2,
+ "m": 2,
+ "b_min": 1,
+ "b_max": 4,
+ "w": 3,
+ "m_draft": 1,
+ "delta": 0.017,
+ "delta_z": 2.0,
+ "beta0": 0.1,
+ "beta1": 44.5,
+ "w_s": 0.0,
+ "w_c": 15.0,
+ "w_n": 0.5,
+ "n_prune": 4,
+ "repair_rounds": 5,
+ "invalid_missing_frac": 0.2,
+ "n_fail_traces": 30,
+ "n_success_traces": 6,
+ "eval_parallel": 1,
+ "policy_model": "vertex_ai/claude-opus-4-8",
+ "policy_label": "Claude Opus 4.8",
+ "dataset": "terminal-bench/terminal-bench-2-1",
+ "ood_dataset": "swe-bench/swe-bench-verified",
+ "concurrency": 10,
+ "smoke_tasks": [
+  "extract-elf",
+  "fix-git"
+ ]
+}

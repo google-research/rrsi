@@ -1,0 +1,2 @@
+#!/bin/sh
+exec sudo -E -n /usr/bin/docker "$@"
