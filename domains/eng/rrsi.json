@@ -1,6 +1,6 @@
 {
  "_doc": "Engineering-design instance: EngDesign-Open, 61 license-free tasks, evolve set = whole suite (no ID held-out), Claude Opus 4.8 policy, official ReAct toolbelt base harness, frozen per-task code verifiers. S = pass rate over 61 x k = 244 trials (the paper's headline); combined_score, valid and no-payload rates are kept as extras and the last two feed the domain guards. Paper values: delta = 0.020 (5 passes of 244), beta0 = 0.15, beta1 = 24.4 (10% tokens per additional pass), w_s = 1 per pass = 244 per unit S, w_c = 2 per unit relative cost. Set delta to null to re-estimate it with `calibrate`.",
- "T": 20,
+ "T": 40,
  "k": 4,
  "m": 2,
  "b_min": 1,

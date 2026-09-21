@@ -1,5 +1,5 @@
 {
-  "_doc": "Agentic-workspace instance: Harvey LAB, fixed evolve set of 120 tasks + pristine held-out 40 (data/split_workspace.json), Claude Opus 4.8 policy, official ReAct toolbelt base harness. S = criteria passed / criteria total over 120 x k trials (about 14,100 criterion verdicts), i.e. per-trial reward = passed/total weighted by total. Paper values: delta = 0.004 (60 criteria of about 14,100), beta0 = 0.10, beta1 = 35.4 (25% tokens per 100 additional criteria), w_s = 0.1 per criterion = 1414 per unit S, w_c = 15 per unit relative cost. Set delta to null to re-estimate it with `calibrate`.",
+  "_doc": "Agentic-workspace instance: Harvey LAB, fixed evolve set of 120 tasks + pristine held-out 40 (generated deterministically by split_workspace.py from the Harvey LAB checkout pinned in harvey_lab_commit), Claude Opus 4.8 policy, official ReAct toolbelt base harness. S = criteria passed / criteria total over 120 x k trials (about 14,100 criterion verdicts), i.e. per-trial reward = passed/total weighted by total. Paper values: delta = 0.004 (60 criteria of about 14,100), beta0 = 0.10, beta1 = 35.4 (25% tokens per 100 additional criteria), w_s = 0.1 per criterion = 1414 per unit S, w_c = 15 per unit relative cost. Set delta to null to re-estimate it with `calibrate`.",
   "T": 20, "k": 2, "m": 2,
   "b_min": 1, "b_max": 3, "w": 3, "m_draft": 1,
   "delta": 0.004, "delta_z": 2.0,
@@ -9,6 +9,7 @@
   "repair_rounds": 5, "invalid_missing_frac": 0.1,
   "n_fail_traces": 60, "n_success_traces": 6, "eval_parallel": 1,
   "harvey_lab_root": "harvey-labs",
+  "harvey_lab_commit": "1da4750171bc5a534960b3d82d15ba7fd2cf653f",
   "gateway_port": 8992, "max_concurrent": 12,
   "judge_model": "gemini-3.5-flash"
 }

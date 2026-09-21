@@ -55,8 +55,24 @@ import briefs                            # noqa: E402
 import render                            # noqa: E402
 
 CFG = json.loads((HERE / "rrsi.json").read_text())
-SPLIT = json.loads((HERE / "data" / "split_workspace.json").read_text())
 HARVEY_LAB_ROOT = Path(os.environ.get("HARVEY_LAB_ROOT", CFG.get("harvey_lab_root") or "harvey-labs"))
+SPLIT_PATH = HERE / "data" / "split_workspace.json"
+_SPLIT: dict | None = None
+
+
+def split() -> dict:
+    """The evolve / held-out split. Not distributed with the repository: it is
+    generated deterministically from the Harvey LAB checkout on first use (see
+    split_workspace.py) and cached at SPLIT_PATH."""
+    global _SPLIT
+    if _SPLIT is None:
+        if not SPLIT_PATH.exists():
+            import split_workspace                       # noqa: WPS433
+            split_workspace.write_split(str(SPLIT_PATH), str(HARVEY_LAB_ROOT))
+        _SPLIT = json.loads(SPLIT_PATH.read_text())
+    return _SPLIT
+
+
 HARVEY_PY = Path(os.environ.get("HARVEY_PY", str(HARVEY_LAB_ROOT / ".venv" / "bin" / "python")))
 AGENT_PY = os.environ.get("RRSI_AGENT_PYTHON", sys.executable)
 
@@ -101,13 +117,13 @@ class WorkspaceDomain(Domain):
 
     # ---- task sets ---------------------------------------------------------
     def evolve_ids(self) -> list[str]:
-        return list(SPLIT["tasks"]["evolve"])
+        return list(split()["tasks"]["evolve"])
 
     def heldout_ids(self) -> list[str]:
-        return list(SPLIT["tasks"]["heldout"])
+        return list(split()["tasks"]["heldout"])
 
     def smoke_ids(self, incumbent_per_task=None) -> list[str]:
-        return list(SPLIT["smoke"])
+        return list(split()["smoke"])
 
     def regression_threshold(self, k: int) -> float:
         return 0.05
