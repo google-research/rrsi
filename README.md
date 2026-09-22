@@ -1,10 +1,10 @@
 # RRSI: Regularized Recursive Self-Improvement of Agent Harnesses
 
-Check out our [paper](https://regularized-rsi.com/assets/RRSI.pdf) and [project page](https://regularized-rsi.com/) for more details.
+Check out our [paper](https://arxiv.org/abs/2609.24972) and [project page](https://regularized-rsi.com/) for more details.
 
 ## 🔥 Updates
 
-- [2026-09] We released the code, our [paper](https://regularized-rsi.com/assets/RRSI.pdf) and the [project page](https://regularized-rsi.com/).
+- [09-21-2026] Our [paper](https://arxiv.org/abs/2609.24972) is out! Check it out! [project page](https://regularized-rsi.com/)
 
 ## 🧬 Overview
 
@@ -161,16 +161,16 @@ python3 -m pytest tests            # or: python3 tests/test_core.py
 
 ## 🙏 Acknowledgements
 
-The starting harnesses H_0 are the Terminus-2 agent from [harbor](https://github.com/laude-institute/harbor) and the react_toolbelt agent and runner from [archipelago](https://github.com/Mercor-Intelligence/archipelago). The instances evaluate on [Terminal-Bench](https://github.com/harbor-framework/terminal-bench), [SWE-bench Verified](https://github.com/SWE-bench/SWE-bench), [Harvey LAB](https://github.com/harveyai/harvey-labs), [JobBench](https://github.com/Job-Bench/job-bench-eval), [GDPval](https://openai.com/index/gdpval/), [APEX-Agents](https://www.mercor.com/apex/apex-agents-leaderboard/), [EngDesign](https://github.com/AGI4Engineering/EngDesign) and [Frontier-Eng](https://github.com/Einsia/Frontier-Engineering).
+The starting harnesses are the Terminus-2 agent from [harbor](https://github.com/laude-institute/harbor) and the react_toolbelt agent and runner from [archipelago](https://github.com/Mercor-Intelligence/archipelago). The instances evaluate on [Terminal-Bench](https://github.com/harbor-framework/terminal-bench), [SWE-bench Verified](https://github.com/SWE-bench/SWE-bench), [Harvey LAB](https://github.com/harveyai/harvey-labs), [JobBench](https://github.com/Job-Bench/job-bench-eval), [GDPval](https://openai.com/index/gdpval/), [APEX-Agents](https://www.mercor.com/apex/apex-agents-leaderboard/), [EngDesign](https://github.com/AGI4Engineering/EngDesign) and [Frontier-Eng](https://github.com/Einsia/Frontier-Engineering).
 
 ## 💬 Citation
 
 ```bibtex
 @article{xia2026rrsi,
-  title   = {{RRSI}: Regularized Recursive Self-Improvement of Agent Harnesses},
-  author  = {Xia, Peng and Han, Rujun and Wang, Zifeng and Chen, Yanfei and Zhang, Yufan and Lee, Yoonho and Huang, Chengsong and Yu, Han and CuiZhu, Zhongying and Ming, Yifei and Yao, Huaxiu and Gokturk, Burak and Pfister, Tomas and Lee, Chen-Yu},
-  year    = {2026},
-  url     = {https://regularized-rsi.com}
+  title={RRSI: Regularized Recursive Self-Improvement of Agent Harnesses},
+  author={Xia, Peng and Han, Rujun and Wang, Zifeng and Chen, Yanfei and Zhang, Yufan and Lee, Yoonho and Huang, Chengsong and Yu, Han and CuiZhu, Zhongying and Ming, Yifei and Yao, Huaxiu and Gokturk, Burak and Pfister, Tomas and Lee, Chen-Yu},
+  journal={arXiv preprint arXiv:2609.24972},
+  year={2026}
 }
 ```
 
@@ -185,6 +185,4 @@ carries its own license.
 
 ## Disclaimer
 
-This is not an officially supported Google product. This project is not
-eligible for the
-[Google Open Source Software Vulnerability Rewards Program](https://bughunters.google.com/open-source-security).
+This is not an officially supported Google product. This project is not eligible for the [Google Open Source Software Vulnerability Rewards Program](https://bughunters.google.com/open-source-security).
