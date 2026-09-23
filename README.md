@@ -4,7 +4,7 @@ Check out our [paper](https://arxiv.org/abs/2609.24972) and [project page](https
 
 ## 🔥 Updates
 
-- [09-21-2026] Our [paper](https://arxiv.org/abs/2609.24972) is out! Check it out! [project page](https://regularized-rsi.com/)
+- [09/21/2026] Our [paper](https://arxiv.org/abs/2609.24972) is out! Check it out! [[project page]](https://regularized-rsi.com/)
 
 ## 🧬 Overview
 
@@ -75,7 +75,7 @@ The proposer, the analyst, the critic and the frozen policy are Claude Opus 4.8 
 gcloud auth application-default login
 export VERTEX_PROJECT="your-project-id" VERTEXAI_PROJECT="your-project-id"
 export VERTEX_LOCATION=global VERTEXAI_LOCATION=global
-export RRSI_VERTEX_PROJECTS="your-project-id"      # comma-separated list: the search roles spread their calls round-robin
+export RRSI_VERTEX_PROJECTS="your-project-id"
 ```
 
 ### 2. Run an instance
@@ -91,7 +91,7 @@ python3 rrsi.py --domain <name> status
 
 Each round drafts two candidates in their own git worktrees, screens them, evaluates both on the full evolve set and fast-forwards `evolve/<name>` to the winner. `runs/<name>/` holds the frontier, the edit history and the raw trials. Hyperparameters live in `domains/<name>/rrsi.json` and can be overridden on the command line (`--T`, `--k`, `--delta`, `--beta1`, ...); `readjudicate --t <t>` re-applies Algorithm 2 to a stored round and `reevaluate --t <t>` re-measures one after an infrastructure failure.
 
-**Open the README of the instance you want to run** for its environment, its evaluation protocol and the out-of-distribution runs:
+Please refer to the specific document for the instance you want to run for its environment, its evaluation protocol and the out-of-distribution runs:
 
 - [`domains/coding`](domains/coding/README.md): Terminal-Bench 2.1, then SWE-bench Verified
 - [`domains/workspace`](domains/workspace/README.md): Harvey LAB, then JobBench, GDPval and APEX-Agents
@@ -168,7 +168,7 @@ The starting harnesses are the Terminus-2 agent from [harbor](https://github.com
 ```bibtex
 @article{xia2026rrsi,
   title={RRSI: Regularized Recursive Self-Improvement of Agent Harnesses},
-  author={Xia, Peng and Han, Rujun and Wang, Zifeng and Chen, Yanfei and Zhang, Yufan and Lee, Yoonho and Huang, Chengsong and Yu, Han and CuiZhu, Zhongying and Ming, Yifei and Yao, Huaxiu and Gokturk, Burak and Pfister, Tomas and Lee, Chen-Yu},
+  author={Xia, Peng and Han, Rujun and Wang, Zifeng and Chen, Yanfei and Zhuang, Yufan and Lee, Yoonho and Huang, Chengsong and Yu, Han and CuiZhu, Zhongying and Ming, Yifei and Yao, Huaxiu and Gokturk, Burak and Pfister, Tomas and Lee, Chen-Yu},
   journal={arXiv preprint arXiv:2609.24972},
   year={2026}
 }
@@ -180,8 +180,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-Apache 2.0; see [LICENSE](LICENSE). Third-party code under `third_party/`
-carries its own license.
+Apache 2.0; see [LICENSE](LICENSE). Third-party code under `third_party/` carries its own license.
 
 ## Disclaimer
 
