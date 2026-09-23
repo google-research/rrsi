@@ -179,6 +179,20 @@ def test_config_roundtrip():
         assert ev.S == 1.0
 
 
+def test_generate_without_projects_raises_clear_error():
+    from rrsi import llm
+    saved = llm._PROJECTS
+    llm._PROJECTS = []
+    try:
+        llm.generate("hi", max_retries=1)
+    except RuntimeError as e:
+        assert "RRSI_VERTEX_PROJECTS" in str(e)
+    else:
+        raise AssertionError("generate() did not raise")
+    finally:
+        llm._PROJECTS = saved
+
+
 if __name__ == "__main__":
     import inspect
     fails = 0

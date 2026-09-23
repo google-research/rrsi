@@ -56,11 +56,15 @@ _JSON_SUFFIX = ("\n\nOutput ONLY a single valid JSON object. No prose before or 
                 "after, no markdown fences.")
 
 
-def _client_for(idx: int):
-    from anthropic import AnthropicVertex
+def _require_projects() -> None:
     if not _PROJECTS:
         raise RuntimeError("set RRSI_VERTEX_PROJECTS to a comma-separated list of GCP "
                            "projects with Claude on Vertex AI enabled")
+
+
+def _client_for(idx: int):
+    from anthropic import AnthropicVertex
+    _require_projects()
     with _clients_lock:
         c = _clients.get(idx)
         if c is None:
@@ -97,6 +101,8 @@ def generate(prompt: str, system: str | None = None, max_retries: int = 6,
     content = ([{"type": "text", "text": cache_prefix,
                  "cache_control": {"type": "ephemeral"}},
                 {"type": "text", "text": prompt}] if cache_prefix else prompt)
+    # Fail before the round-robin below, which would divide by zero.
+    _require_projects()
     n = len(_PROJECTS)
     start = next(_rr)
     last_err: Exception | None = None
