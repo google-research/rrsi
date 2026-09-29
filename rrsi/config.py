@@ -62,6 +62,10 @@ class RRSIConfig:
     # ---- proposal side (Algorithm 1) -------------------------------------
     b_min: int = 1
     b_max: int = 4
+    disable_proposal_regs: bool = False   # Table 2 arm: pin budget at b_max, drop
+                                          # tried/stall/explore/prune directives
+    disable_acceptance_regs: bool = False # Table 2 arm: admissibility = plain
+                                          # argmax on S' (no floor/cost/novelty)
     endpoint_anchored: bool = False   # anchor the anneal cosine to t/(T-1): b_{T-1} = b_min
     w: int = 3
     m_draft: int = 1

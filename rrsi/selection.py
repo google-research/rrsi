@@ -99,6 +99,15 @@ def judge(cand: Candidate, incumbent: EvalResult, S_star: float, delta: float,
     ev = cand.ev
     if ev is None:
         return Decision(cand.variant, False, cand.gate_failure or "not evaluated")
+    if getattr(cfg, "disable_acceptance_regs", False):
+        # Table 2 arm "w/o acceptance regs": admissibility is gain over the
+        # incumbent, plain argmax picks among candidates; domain guards
+        # still bind because they are part of the evaluation contract.
+        gd = Decision(cand.variant, not (guards or []), "no-acceptance-regs arm",
+                      S=cand.ev.S, C=cand.ev.C,
+                      delta_S=cand.ev.S - incumbent.S,
+                      delta_C=0.0)
+        return gd
     dS = ev.S - incumbent.S
     dC = relative_cost_change(ev.C, incumbent.C)
     nov = novelty(cand.components, incumbent_counts)
