@@ -62,6 +62,7 @@ class RRSIConfig:
     # ---- proposal side (Algorithm 1) -------------------------------------
     b_min: int = 1
     b_max: int = 4
+    endpoint_anchored: bool = False   # anchor the anneal cosine to t/(T-1): b_{T-1} = b_min
     w: int = 3
     m_draft: int = 1
     # ---- selection side (Algorithm 2) ------------------------------------
