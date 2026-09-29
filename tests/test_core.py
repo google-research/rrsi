@@ -63,6 +63,30 @@ def test_schedule_matches_eq_anneal():
     assert edit_budget(T, T, bmin, bmax) == bmin
 
 
+def test_schedule_endpoint_anchored_matches_eq_anneal():
+    # Endpoint-anchored evaluation: x = t/(T-1) anchors b_0 = b_max and
+    # b_{T-1} = b_min (Table 5: b_min is the final-round edit budget).
+    T, bmin, bmax = 20, 1, 4
+    for t in range(T):
+        expect = math.ceil(bmin + (bmax - bmin) * 0.5 * (1 + math.cos(math.pi * t / (T - 1))))
+        assert edit_budget(t, T, bmin, bmax, endpoint_anchored=True) == expect
+    tab = budget_table(T, bmin, bmax, endpoint_anchored=True)
+    assert tab[0] == bmax and tab[-1] == bmin
+    assert tab == sorted(tab, reverse=True)
+
+
+def test_schedule_released_behavior_unchanged():
+    # Default remains the released evaluation (cosine at t/T); Table 2/5
+    # reproductions must not shift under the fix.
+    assert budget_table(8, 1, 4) == [4, 4, 4, 4, 3, 2, 2, 2]
+
+
+def test_schedule_anchored_degenerate_cases():
+    # T = 2 must hit both endpoints exactly; T = 1 has no annealing range.
+    assert budget_table(2, 1, 4, endpoint_anchored=True) == [4, 1]
+    assert budget_table(1, 1, 4, endpoint_anchored=True) == [4]
+
+
 def test_estimator_and_weights():
     ev = _ev("j", {"a": [1, 0], "b": [1, 1]}, 2)
     assert abs(ev.S - 0.75) < 1e-9 and ev.n_expected == 4 and ev.missing == 0

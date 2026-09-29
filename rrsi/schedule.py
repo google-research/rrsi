@@ -40,15 +40,32 @@ from __future__ import annotations
 import math
 
 
-def edit_budget(t: int, T: int, b_min: int, b_max: int) -> int:
-    """b_t for round t (0-indexed) of a T-round run."""
+def edit_budget(t: int, T: int, b_min: int, b_max: int,
+                endpoint_anchored: bool = False) -> int:
+    """b_t for round t (0-indexed) of a T-round run.
+
+    With ``endpoint_anchored=False`` (the released behavior), the cosine is
+    evaluated at ``t / T`` and rounds t = 0..T-1, so the budget anneals toward
+    b_min without ever reaching it in the last evaluated round.
+
+    With ``endpoint_anchored=True`` the cosine is evaluated at
+    ``t / (T - 1)`` over the same range, anchoring the endpoints exactly:
+    b_0 = b_max and b_{T-1} = b_min, matching Table 5's description of
+    b_min as the final-round edit budget.
+    """
     if T <= 0:
         return int(b_max)
-    t = max(0, min(int(t), int(T)))
-    v = b_min + (b_max - b_min) * 0.5 * (1.0 + math.cos(math.pi * t / T))
+    t = max(0, min(int(t), int(T - 1)) if endpoint_anchored else int(t))
+    if endpoint_anchored:
+        x = t / (T - 1) if T > 1 else 0.0
+    else:
+        x = t / T
+    v = b_min + (b_max - b_min) * 0.5 * (1.0 + math.cos(math.pi * x))
     # Guard against 1.0000000002 -> 2 from floating error at t = T.
     return int(math.ceil(round(v, 9)))
 
 
-def budget_table(T: int, b_min: int, b_max: int) -> list[int]:
-    return [edit_budget(t, T, b_min, b_max) for t in range(T)]
+def budget_table(T: int, b_min: int, b_max: int,
+                 endpoint_anchored: bool = False) -> list[int]:
+    return [edit_budget(t, T, b_min, b_max, endpoint_anchored)
+            for t in range(T)]

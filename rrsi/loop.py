@@ -271,7 +271,7 @@ class Run:
             return
 
         # 2-3) b_t, sigma_t, T_t, U_t, E_t, B_t
-        budget = edit_budget(t, cfg.T, cfg.b_min, cfg.b_max)
+        budget = edit_budget(t, cfg.T, cfg.b_min, cfg.b_max, cfg.endpoint_anchored)
         traj = [x["S"] for x in fr["trajectory"]]
         sigma = stall_flag(traj, t, cfg.w, delta)
         tried = self.history.tried()
