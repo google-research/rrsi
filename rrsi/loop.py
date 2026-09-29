@@ -271,13 +271,26 @@ class Run:
             return
 
         # 2-3) b_t, sigma_t, T_t, U_t, E_t, B_t
-        budget = edit_budget(t, cfg.T, cfg.b_min, cfg.b_max)
-        traj = [x["S"] for x in fr["trajectory"]]
-        sigma = stall_flag(traj, t, cfg.w, delta)
-        tried = self.history.tried()
-        explore = exploration(t, sigma, tried, cfg.m_draft)
-        prune = self.history.prune_set(t, cfg.n_prune)
-        hist_rows = self.history.render()
+        # Table 2 arm "w/o proposal regs": the budget is pinned at b_max
+        # (no anneal) and the proposal conditioning drops the directive
+        # packet (tried / stall / exploration / prune) — the proposer
+        # sees only the analysis report and the accepted machinery.
+        if cfg.disable_proposal_regs:
+            budget = cfg.b_max
+            traj = [x["S"] for x in fr["trajectory"]]
+            sigma = 0
+            tried: set[str] = set()
+            explore = {"untried": [], "text": ""}
+            prune = []
+            hist_rows = [r for r in self.history.render() if r.get("accepted")]
+        else:
+            budget = edit_budget(t, cfg.T, cfg.b_min, cfg.b_max, cfg.endpoint_anchored)
+            traj = [x["S"] for x in fr["trajectory"]]
+            sigma = stall_flag(traj, t, cfg.w, delta)
+            tried = self.history.tried()
+            explore = exploration(t, sigma, tried, cfg.m_draft)
+            prune = self.history.prune_set(t, cfg.n_prune)
+            hist_rows = self.history.render()
         digests = load_digests(rdir)
         skill_md, patterns_md = d.constitution(self.repo)
         log(d.name, f"b_t={budget} sigma_t={sigma} untried={explore['untried']} "

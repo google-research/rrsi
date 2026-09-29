@@ -63,6 +63,61 @@ def test_schedule_matches_eq_anneal():
     assert edit_budget(T, T, bmin, bmax) == bmin
 
 
+def test_schedule_endpoint_anchored_matches_eq_anneal():
+    # Endpoint-anchored evaluation: x = t/(T-1) anchors b_0 = b_max and
+    # b_{T-1} = b_min (Table 5: b_min is the final-round edit budget).
+    T, bmin, bmax = 20, 1, 4
+    for t in range(T):
+        expect = math.ceil(bmin + (bmax - bmin) * 0.5 * (1 + math.cos(math.pi * t / (T - 1))))
+        assert edit_budget(t, T, bmin, bmax, endpoint_anchored=True) == expect
+    tab = budget_table(T, bmin, bmax, endpoint_anchored=True)
+    assert tab[0] == bmax and tab[-1] == bmin
+    assert tab == sorted(tab, reverse=True)
+
+
+def test_schedule_released_behavior_unchanged():
+    # Default remains the released evaluation (cosine at t/T); Table 2/5
+    # reproductions must not shift under the fix.
+    assert budget_table(8, 1, 4) == [4, 4, 4, 4, 3, 2, 2, 2]
+
+
+def test_schedule_anchored_degenerate_cases():
+    # T = 2 must hit both endpoints exactly; T = 1 has no annealing range.
+    assert budget_table(2, 1, 4, endpoint_anchored=True) == [4, 1]
+    assert budget_table(1, 1, 4, endpoint_anchored=True) == [4]
+
+
+def test_proposal_regs_arm_pins_budget_and_drops_directives():
+    from rrsi.config import RRSIConfig
+    cfg = RRSIConfig(disable_proposal_regs=True)
+    assert cfg.disable_proposal_regs
+    # the arm pins the round budget at b_max (loop.py), bypassing the anneal:
+    budget = cfg.b_max if cfg.disable_proposal_regs else \
+        edit_budget(19, cfg.T, cfg.b_min, cfg.b_max, cfg.endpoint_anchored)
+    assert budget == cfg.b_max != cfg.b_min
+
+
+def test_acceptance_regs_arm_admissibility():
+    from rrsi.config import RRSIConfig
+    from rrsi.selection import judge
+    from rrsi.evaluate import EvalResult
+    cfg = RRSIConfig(disable_acceptance_regs=True)
+    inc = EvalResult(job="j", k=2, S=0.40, C=100.0, n_expected=4, missing=0, per_task={})
+    # a candidate BELOW the noise-adjusted floor still passes in this arm
+    cand = Candidate(variant="x", edits=[{"component": "skill", "hypothesis": "h"}],
+                     ev=EvalResult(job="j", k=2, S=0.30, C=110.0, n_expected=4, missing=0, per_task={}))
+    d = judge(cand, inc, S_star=0.45, delta=0.05, cfg=cfg, incumbent_counts={})
+    assert d.admissible, d.reason
+    # guards still bind
+    d2 = judge(cand, inc, S_star=0.45, delta=0.05, cfg=cfg, incumbent_counts={},
+               guards=["valid_rate_drop"])
+    assert not d2.admissible
+    # default arm: same candidate is inadmissible (below floor)
+    cfg_off = RRSIConfig()
+    d3 = judge(cand, inc, S_star=0.45, delta=0.05, cfg=cfg_off, incumbent_counts={})
+    assert not d3.admissible and "floor" in d3.reason
+
+
 def test_estimator_and_weights():
     ev = _ev("j", {"a": [1, 0], "b": [1, 1]}, 2)
     assert abs(ev.S - 0.75) < 1e-9 and ev.n_expected == 4 and ev.missing == 0
