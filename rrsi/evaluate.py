@@ -110,7 +110,7 @@ def aggregate(job: str, k: int, per_task: dict, extra: dict | None = None) -> Ev
         for r, w in zip(tr.rewards, tr.weights):
             num += r * w
             den += w
-        toks += [x for x in tr.tokens if isinstance(x, (int, float)) and x > 0]
+        toks += [x for x in tr.tokens if isinstance(x, (int, float)) and x >= 0]
         missing += tr.missing
     return EvalResult(job=job, k=k, per_task=per_task,
                       S=(num / den) if den else 0.0,
@@ -129,7 +129,12 @@ def evaluate(domain, root: Path, runs_dir: Path, job: str, ids: list[str],
 
 
 def relative_cost_change(C_cand: float | None, C_inc: float | None) -> float:
-    """Delta C = (C' - C_t) / C_t; 0 when either side has no token count."""
-    if not C_cand or not C_inc:
+    """Delta C = (C' - C_t) / C_t when the denominator is defined.
+
+    A measured zero candidate cost is a real 100% reduction. Missing costs and a
+    zero incumbent cost have no defined relative change and retain the neutral
+    fallback used by the selection rule.
+    """
+    if C_cand is None or C_inc is None or C_inc == 0:
         return 0.0
     return (C_cand - C_inc) / C_inc

@@ -41,7 +41,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from rrsi.calibrate import calibrate                       # noqa: E402
 from rrsi.components import normalize, novelty              # noqa: E402
 from rrsi.config import RRSIConfig                         # noqa: E402
-from rrsi.evaluate import EvalResult, TaskResult, aggregate  # noqa: E402
+from rrsi.evaluate import (EvalResult, TaskResult, aggregate,
+                           relative_cost_change)  # noqa: E402
 from rrsi.history import History, exploration, stall_flag   # noqa: E402
 from rrsi.schedule import budget_table, edit_budget         # noqa: E402
 from rrsi.selection import Candidate, cost_rule, select_round  # noqa: E402
@@ -70,6 +71,40 @@ def test_estimator_and_weights():
            "b": TaskResult(rewards=[0.0, 0.0], weights=[90, 90])}
     ev = aggregate("w", 2, per)
     assert abs(ev.S - 15 / 200) < 1e-9          # criteria-weighted fraction
+
+
+
+def test_zero_token_cost_is_observed_and_included_in_the_cost_mean():
+    per = {
+        "a": TaskResult(rewards=[1.0, 1.0], tokens=[0, 100]),
+        "b": TaskResult(rewards=[1.0], tokens=[None]),
+    }
+    ev = aggregate("zero-cost", 1, per)
+    assert ev.C == 50.0
+    assert ev.S == 1.0
+    assert ev.per_task["a"].tokens == [0, 100]
+    assert ev.per_task["b"].tokens == [None]
+
+
+def test_relative_cost_change_distinguishes_zero_from_missing_cost():
+    assert relative_cost_change(0.0, 100.0) == -1.0
+    assert relative_cost_change(50.0, 100.0) == -0.5
+    assert relative_cost_change(None, 100.0) == 0.0
+    assert relative_cost_change(0.0, None) == 0.0
+    # The relative change is undefined when the incumbent denominator is zero.
+    assert relative_cost_change(100.0, 0.0) == 0.0
+
+
+def test_zero_cost_candidate_receives_the_mathematical_cost_reduction():
+    cfg = RRSIConfig(beta0=0.1, beta1=40.0, w_s=100.0, w_c=15.0, w_n=0.5)
+    inc = _ev("inc", {"a": [1.0]}, 1, tokens=100.0)
+    free = Candidate("free", [{"id": "C1", "component": "prompt"}],
+                     ev=_ev("free", {"a": [1.0]}, 1, tokens=0.0))
+    winner, decisions = select_round([free], inc, 1.0, 0.02, cfg, {})
+    assert winner is free
+    assert decisions[0].admissible
+    assert decisions[0].delta_C == -1.0
+    assert "cost change" not in decisions[0].reason or "-1" in decisions[0].reason
 
 
 def test_calibration_bootstrap_and_repeats():
