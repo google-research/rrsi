@@ -97,7 +97,7 @@ def cost_rule(delta_S: float, delta_C: float, nov: int, delta: float,
 def judge(cand: Candidate, incumbent: EvalResult, S_star: float, delta: float,
           cfg, incumbent_counts: dict, guards: list[str] | None = None) -> Decision:
     ev = cand.ev
-    if ev is None:
+    if cand.gate_failure or ev is None:
         return Decision(cand.variant, False, cand.gate_failure or "not evaluated")
     dS = ev.S - incumbent.S
     dC = relative_cost_change(ev.C, incumbent.C)
@@ -127,7 +127,8 @@ def select_round(cands: list[Candidate], incumbent: EvalResult, S_star: float,
     """Judge every candidate, return (winner or None, decisions)."""
     decisions = []
     for c in cands:
-        g = guard_fn(incumbent, c.ev) if (guard_fn and c.ev is not None) else []
+        g = (guard_fn(incumbent, c.ev)
+             if guard_fn and c.ev is not None and not c.gate_failure else [])
         decisions.append(judge(c, incumbent, S_star, delta, cfg,
                                incumbent_counts, g))
     adm = [(c, d) for c, d in zip(cands, decisions) if d.admissible]
