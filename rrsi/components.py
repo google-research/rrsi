@@ -94,6 +94,8 @@ def has_evidence(component: str, diff: str, domain_signals: list | None = None) 
 
 def normalize(declared: str | None, diff: str,
               domain_signals: list | None = None) -> str:
+    if text_only(diff):
+        return "prompt"
     d = (declared or "").strip().lower()
     if d in K and has_evidence(d, diff, domain_signals):
         return d
