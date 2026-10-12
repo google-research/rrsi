@@ -175,8 +175,30 @@ def test_config_roundtrip():
         p.write_text(json.dumps({"T": 7, "k": 3, "beta1": 12.5, "custom": "x"}))
         cfg = RRSIConfig.load(p, T=None, k=5)
         assert cfg.T == 7 and cfg.k == 5 and cfg.beta1 == 12.5 and cfg.notes["custom"] == "x"
+        p.write_text(json.dumps(cfg.dump()))
+        assert RRSIConfig.load(p).dump() == cfg.dump()
         ev = EvalResult.from_json(aggregate("j", 1, {"a": TaskResult(rewards=[1.0])}).to_json())
         assert ev.S == 1.0
+
+
+def test_config_preserves_explicit_notes_and_extra_fields():
+    with tempfile.TemporaryDirectory() as td:
+        p = Path(td) / "rrsi.json"
+        p.write_text(json.dumps({"T": 7, "notes": {"description": "trial", "custom": "old",
+                                                "metadata": {"tags": ["baseline"]}},
+                                 "custom": "x"}))
+        cfg = RRSIConfig.load(p)
+        assert cfg.T == 7
+        assert cfg.notes == {"description": "trial", "custom": "x",
+                             "metadata": {"tags": ["baseline"]}}
+
+
+def test_config_explicit_notes_override():
+    with tempfile.TemporaryDirectory() as td:
+        p = Path(td) / "rrsi.json"
+        p.write_text(json.dumps({"notes": {"description": "trial"}, "custom": "x"}))
+        cfg = RRSIConfig.load(p, notes={"override": "explicit"})
+        assert cfg.notes == {"override": "explicit"}
 
 
 if __name__ == "__main__":
