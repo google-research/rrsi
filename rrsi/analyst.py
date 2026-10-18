@@ -107,6 +107,7 @@ def prepare_rendered(domain, traces: dict, rendered_dir: Path) -> None:
     for tid, rec in traces.items():
         out = rendered_dir / f"{tid}.txt"
         if not out.exists():
+            out.parent.mkdir(parents=True, exist_ok=True)
             out.write_text(domain.render_trace(rec, detail=True))
 
 
@@ -177,8 +178,9 @@ def analyze(domain, traces: dict, per_task: dict, round_dir: Path,
                 d = digest_task(rendered_dir, r["task_id"], r.get("lens", "failure"),
                                 domain.briefs["digester"], r.get("questions"),
                                 model=model)
-                (digests_dir / f"{r['task_id']}_{r.get('lens', 'failure')}.json"
-                 ).write_text(json.dumps(d, ensure_ascii=False, indent=1))
+                out = digests_dir / f"{r['task_id']}_{r.get('lens', 'failure')}.json"
+                out.parent.mkdir(parents=True, exist_ok=True)
+                out.write_text(json.dumps(d, ensure_ascii=False, indent=1))
                 return d
             with ThreadPoolExecutor(max_workers=DIGEST_PARALLELISM) as ex:
                 digests = list(ex.map(run, valid))
@@ -200,5 +202,5 @@ def analyze(domain, traces: dict, per_task: dict, round_dir: Path,
 def load_digests(round_dir: Path) -> list:
     dg = round_dir / "analysis" / "digests"
     if dg.exists():
-        return [json.loads(p.read_text()) for p in sorted(dg.glob("*.json"))]
+        return [json.loads(p.read_text()) for p in sorted(dg.rglob("*.json"))]
     return []
