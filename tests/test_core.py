@@ -175,6 +175,8 @@ def test_config_roundtrip():
         p.write_text(json.dumps({"T": 7, "k": 3, "beta1": 12.5, "custom": "x"}))
         cfg = RRSIConfig.load(p, T=None, k=5)
         assert cfg.T == 7 and cfg.k == 5 and cfg.beta1 == 12.5 and cfg.notes["custom"] == "x"
+        p.write_text(json.dumps(cfg.dump()))
+        assert RRSIConfig.load(p).notes == {"custom": "x"}
         ev = EvalResult.from_json(aggregate("j", 1, {"a": TaskResult(rewards=[1.0])}).to_json())
         assert ev.S == 1.0
 

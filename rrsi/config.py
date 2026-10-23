@@ -89,7 +89,8 @@ class RRSIConfig:
         raw = json.loads(Path(path).read_text())
         known = {f.name for f in fields(cls)}
         kw = {k: v for k, v in raw.items() if k in known}
-        kw["notes"] = {k: v for k, v in raw.items() if k not in known}
+        kw["notes"] = {**(raw.get("notes") or {}),
+                       **{k: v for k, v in raw.items() if k not in known}}
         kw.update({k: v for k, v in overrides.items() if v is not None})
         return cls(**kw)
 
