@@ -151,6 +151,9 @@ def test_history_summaries_prune_and_explore():
         assert novelty(["client_tool", "prompt"], h.incumbent_component_counts()) == 1
         assert novelty(["skill"], {"skill": 2}) == 0
         assert h.has(1, "B") and not h.has(5, "A")
+        h.append_candidate(7, "A", [{"id": "C1", "component": "prompt"}],
+                           "ACCEPTED", 0.04, 0.0, True, 0.56, 1000, None)
+        assert h.yield_g(t=6, n_prune=4)["prompt"] == -math.inf    # future edits are not recent
     traj = [0.50, 0.53, 0.53, 0.535, 0.60]
     assert stall_flag(traj, 3, 3, 0.02) == 0       # 0.535 - 0.50 = 0.035 > 0.02
     assert stall_flag(traj, 3, 2, 0.02) == 1       # 0.535 - 0.53 = 0.005 <= 0.02

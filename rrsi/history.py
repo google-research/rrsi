@@ -144,7 +144,7 @@ class History:
         """g_t(l) for every tried component; -inf when nothing recent."""
         g = {c: -math.inf for c in self.tried()}
         for r in self.measured():
-            if t - int(r["t"]) <= n_prune:
+            if 0 <= t - int(r["t"]) <= n_prune:
                 c = r["component"]
                 g[c] = max(g.get(c, -math.inf), float(r["delta_S"]))
         return g
