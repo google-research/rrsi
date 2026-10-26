@@ -327,13 +327,17 @@ def propose(domain, harness_dir: Path, report: dict, history_rows: list,
                     for k, v in act.items()})
         if a == "done":
             edits = act.get("edits") or act.get("candidates") or []
+            # A repair round starts from the previous attempt's edits, already in
+            # the working tree, so re-declaring or splitting them (what an
+            # undeclared-bundling objection asks for) needs no new file change.
+            changed = n_edits > 0 or bool(repair_brief)
             problems = []
-            if n_edits == 0 and edits:
+            if not changed and edits:
                 transcript += ("\n[you] done\n[result] ERROR: you declared edits but "
                                "made ZERO file changes. Implement them with "
                                "edit_file/write_file, then call done.")
                 continue
-            if n_edits > 0 and not edits:
+            if changed and not edits:
                 problems.append("edits array is empty")
             if len(edits) > budget:
                 problems.append(f"{len(edits)} edits exceed the budget b_t = {budget}")
@@ -352,7 +356,7 @@ def propose(domain, harness_dir: Path, report: dict, history_rows: list,
                 problems.append("this variant holds a RESERVED EXPLORATION SLOT: at "
                                 "least one edit must be on a never-exercised "
                                 f"component from {explore['untried']}")
-            if problems and n_edits > 0:
+            if problems and changed:
                 transcript += (f"\n[you] done\n[result] ERROR: {problems}. Call done "
                                f"again fixed (drop or merge edits if over budget; "
                                f"add the required edit if a slot is reserved).")
