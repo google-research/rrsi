@@ -119,11 +119,28 @@ def _bash_ok(cmd: str) -> bool:
     return True
 
 
+def _inside(root: Path, p: Path) -> bool:
+    """True when `p` is `root` or below it. Containment is by path component, not by
+    string prefix: a sibling such as `<dir>/rendered_private` shares the
+    `<dir>/rendered` prefix with the jail, and `str.startswith` would call it contained."""
+    root, p = root.resolve(), p.resolve()
+    return p == root or root in p.parents
+
+
 def _safe(root: Path, rel: str) -> Path:
     p = (root / rel).resolve()
-    if not str(p).startswith(str(root.resolve())):
+    if not _inside(root, p):
         raise ValueError("path escapes the traces dir")
     return p
+
+
+def _glob(root: Path, pattern: str) -> str:
+    """Names matching `pattern` inside the jail; a pattern that leaves it is refused.
+    `Path.glob` honours `..`, so the pattern needs the same check as a read path."""
+    pat = Path(pattern or "*")
+    if pat.is_absolute() or ".." in pat.parts:
+        return "ERROR: pattern must name a path inside the traces dir"
+    return "\n".join(sorted(p.name for p in root.glob(pattern or "*") if _inside(root, p)))
 
 
 def _read_file(root: Path, rel: str, offset, limit) -> str:
@@ -195,8 +212,7 @@ def digest_task(traces_dir: Path, task_id: str, lens: str, domain_brief: str,
                 result = _read_file(traces_dir, act["path"], act.get("offset"),
                                     act.get("limit"))
             elif a == "glob":
-                result = "\n".join(sorted(
-                    p.name for p in traces_dir.glob(act.get("pattern", "*"))))
+                result = _glob(traces_dir, act.get("pattern", "*"))
             elif a == "grep":
                 result = _grep(traces_dir, act.get("pattern", ""),
                                act.get("path", ""), int(act.get("max_hits", 40)))
